@@ -22,6 +22,7 @@ func init() {
 
 // Input a valid JSON string, and return an arbitrary value.
 func main() {
+	flag.Parse()
 	input := getStdIn()
 	fmt.Printf("Got input: %v\n", string(input))
 
@@ -52,7 +53,7 @@ func getStdIn() []byte {
 
 func usage() {
 	_, _ = fmt.Fprintf(os.Stderr, `=======
-asciify
+jutil
 =======
 Usage: jutil [-p <path>]
 Options:
