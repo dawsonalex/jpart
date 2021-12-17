@@ -37,7 +37,7 @@ func main() {
 		os.Exit(1)
 	}
 
-	// just format and output the input if there is not path.
+	// just format and output the input if there is not a path.
 	if jsonPath == "" {
 		output, err := json.MarshalIndent(data, "", "  ")
 		if err != nil {
@@ -75,6 +75,9 @@ func main() {
 	if err != nil {
 		fmt.Printf("jutil: error outputting JSON, %v", err)
 		os.Exit(1)
+	}
+	if displayPath {
+		fmt.Println(jsonPath)
 	}
 	fmt.Println(string(output))
 	os.Exit(0)
