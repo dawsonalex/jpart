@@ -13,8 +13,10 @@ PLATFORMS := linux/amd64 windows/amd64 darwin/amd64 darwin/arm64
 
 release: $(PLATFORMS)
 
+zip:
+
 $(PLATFORMS):
-	GOOS=$(os) GOARCH=$(arch) go build -o 'bin/$(BINARY)-$(os)-$(arch)' $(CMD)
+	GOOS=$(os) GOARCH=$(arch) go build -o 'bin/$(os)/$(arch)/$(BINARY)' $(CMD);mkdir -p artifact;zip artifact/$(BINARY)-$(os)-$(arch) bin/$(os)/$(arch)/$(BINARY)
 
 .PHONY: release $(PLATFORMS)
 

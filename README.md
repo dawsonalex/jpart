@@ -10,18 +10,13 @@ Get the value of a JSON element via it's path name.
 =======
 jutil
 =======
-Usage: jutil [-p <path>]
+Usage: jutil [-p <path>] [-v]
 Options:
   -p string
         A path in the format 'first.second.third' which defines the data you want. Leave empty to see the whole JSON input.
+  -v    Verbose mode displays the path that the element was found on the line before the value output.
+
 ```
-
-## Building
-
-Jutil requires `go 1.18 beta1`. To install it follow the instructions on the _prerequisites_
-section [here](https://go.dev/doc/tutorial/generics).
-
-After that you can build binaries by running `make release`.
 
 ## GitHub Workflow
 
