@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"flag"
 	"fmt"
+	"github.com/dawsonalex/jutil"
 	"io/ioutil"
 	"os"
 )
@@ -24,7 +25,7 @@ func main() {
 	input := getStdIn()
 	fmt.Printf("Got input: %v\n", string(input))
 
-	var jsonIn JsonElement
+	var jsonIn jutil.JsonElement
 	err := json.Unmarshal(input, &jsonIn)
 	if err != nil {
 		fmt.Printf("erro unmarshalling: %v\n", err)
