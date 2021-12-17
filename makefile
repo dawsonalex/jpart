@@ -1,5 +1,5 @@
 BINARY ?= $(shell basename "$(PWD)")# binary name
-CMD := $(wildcard cmd/*.go)
+CMD := $(wildcard *.go)
 temp = $(subst /, ,$@)
 os = $(word 1, $(temp))
 arch = $(word 2, $(temp))
