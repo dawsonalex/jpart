@@ -51,7 +51,7 @@ func getStdIn() []byte {
 }
 
 func usage() {
-	fmt.Fprintf(os.Stderr, `=======
+	_, _ = fmt.Fprintf(os.Stderr, `=======
 asciify
 =======
 Usage: jutil [-p <path>]
