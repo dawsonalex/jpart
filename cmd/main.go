@@ -5,7 +5,9 @@ import (
 	"encoding/json"
 	"flag"
 	"fmt"
+	"github.com/dawsonalex/jpart"
 	"io/ioutil"
+
 	"os"
 	"strings"
 )
@@ -64,48 +66,20 @@ func main() {
 	}
 
 	for _, path := range jsonPaths {
-		keys := strings.Split(path, ".")
-
-		output := walkPath(data, keys)
+		output, err := jpart.Select(jpart.Path(path), data)
+		if err != nil {
+			fmt.Println(err)
+			os.Exit(1)
+		}
 
 		if displayPath {
 			headingLine := strings.Repeat("-", len(path)+2)
 			fmt.Printf("%s\n %s\n%s\n", headingLine, path, headingLine)
 		}
-		fmt.Println(string(output))
+		fmt.Println(output)
 		fmt.Println()
 	}
 	os.Exit(0)
-}
-
-func walkPath(data map[string]interface{}, keys []string) string {
-	var currentElement interface{}
-	currentElement = data
-	for i, key := range keys {
-		switch el := currentElement.(type) {
-		case map[string]interface{}:
-			val, ok := el[key]
-			if !ok {
-				fmt.Printf("jutil: JSON structure doesn't match path %s, got to %s\n", strings.Join(keys, "."), strings.Join(keys[:i], "."))
-				os.Exit(1)
-			}
-			currentElement = val
-		default:
-			// should be the last element in the path, otherwise we error
-			if i != len(keys)-1 {
-				fmt.Printf("jutil: JSON structure doesn't match path %s, got to %s\n", strings.Join(keys, "."), strings.Join(keys[:i], "."))
-				os.Exit(1)
-			}
-			currentElement = el
-		}
-	}
-
-	output, err := json.MarshalIndent(currentElement, "", "  ")
-	if err != nil {
-		fmt.Printf("jutil: error outputting JSON, %v", err)
-		os.Exit(1)
-	}
-	return string(output)
 }
 
 func getStdIn() []byte {

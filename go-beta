@@ -1,3 +1,0 @@
-#!/bin/bash
-alias go=go1.18beta1
-go version
