@@ -21,6 +21,8 @@ jobs:
       - name: Test
         run: go test -v ./...
 
+      # TODO: update version to run before make, so make can use
+      # an env variable for binary versioning.
       - name: Compile
         run: make release
 
