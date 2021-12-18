@@ -10,16 +10,26 @@ import (
 	"strings"
 )
 
-var jsonPath string
+type arrayValue []string
+
+var jsonPaths arrayValue
 var displayPath bool
 
 var Version string
 
+func (f arrayValue) String() string {
+	return "[" + strings.Join(f, ", ") + "]"
+}
+
+func (f *arrayValue) Set(s string) error {
+	*f = append(*f, s)
+	return nil
+}
+
 func init() {
-	flag.StringVar(&jsonPath,
+	flag.Var(&jsonPaths,
 		"p",
-		"",
-		"A path in the format 'first.second.third' which defines the data you want. Leave empty to see the whole JSON input.")
+		"A path in the format 'first.second.third' which defines the data you want. Leave empty to see the whole JSON input. jutil will output a value for each -p if there are multiple.")
 	flag.BoolVar(&displayPath,
 		"v",
 		false,
@@ -35,12 +45,12 @@ func main() {
 	var data map[string]interface{}
 	err := json.Unmarshal(input, &data)
 	if err != nil {
-		fmt.Printf("jutil: error parsing JSON, %v", err)
+		fmt.Printf("jutil: error parsing JSON, %v\n", err)
 		os.Exit(1)
 	}
 
 	// just format and output the input if there is not a path.
-	if jsonPath == "" {
+	if len(jsonPaths) == 0 {
 		output, err := json.MarshalIndent(data, "", "  ")
 		if err != nil {
 			fmt.Printf("jutil: error outputting JSON, %v", err)
@@ -49,9 +59,26 @@ func main() {
 		fmt.Println(string(output))
 		os.Exit(0)
 	}
+	if len(jsonPaths) > 1 {
+		displayPath = true
+	}
 
-	keys := strings.Split(jsonPath, ".")
+	for _, path := range jsonPaths {
+		keys := strings.Split(path, ".")
 
+		output := walkPath(data, keys)
+
+		if displayPath {
+			headingLine := strings.Repeat("-", len(path)+2)
+			fmt.Printf("%s\n %s\n%s\n", headingLine, path, headingLine)
+		}
+		fmt.Println(string(output))
+		fmt.Println()
+	}
+	os.Exit(0)
+}
+
+func walkPath(data map[string]interface{}, keys []string) string {
 	var currentElement interface{}
 	currentElement = data
 	for i, key := range keys {
@@ -59,14 +86,14 @@ func main() {
 		case map[string]interface{}:
 			val, ok := el[key]
 			if !ok {
-				fmt.Printf("jutil: JSON structure doesn't match path %s, got to %s\n", jsonPath, strings.Join(keys[:i], "."))
+				fmt.Printf("jutil: JSON structure doesn't match path %s, got to %s\n", strings.Join(keys, "."), strings.Join(keys[:i], "."))
 				os.Exit(1)
 			}
 			currentElement = val
 		default:
 			// should be the last element in the path, otherwise we error
 			if i != len(keys)-1 {
-				fmt.Printf("jutil: JSON structure doesn't match path %s, got to %s\n", jsonPath, strings.Join(keys[:i], "."))
+				fmt.Printf("jutil: JSON structure doesn't match path %s, got to %s\n", strings.Join(keys, "."), strings.Join(keys[:i], "."))
 				os.Exit(1)
 			}
 			currentElement = el
@@ -78,11 +105,7 @@ func main() {
 		fmt.Printf("jutil: error outputting JSON, %v", err)
 		os.Exit(1)
 	}
-	if displayPath {
-		fmt.Println(jsonPath)
-	}
-	fmt.Println(string(output))
-	os.Exit(0)
+	return string(output)
 }
 
 func getStdIn() []byte {
