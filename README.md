@@ -18,6 +18,14 @@ Options:
 
 ```
 
+Jutil takes input from stdin, for example:
+
+```bash
+curl -s -X GET https://cdn.jsdelivr.net/gh/fawazahmed0/currency-api@1/latest/currencies/eur.json | jutil -p eur.gbp
+```
+
+will output something like `0.84912`.
+
 ## GitHub Workflow
 
 The GitHub workflow defined in `base.yml` attempts to do some common things in a simple way. Currently, it does the
