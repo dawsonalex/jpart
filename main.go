@@ -13,6 +13,8 @@ import (
 var jsonPath string
 var displayPath bool
 
+var Version string
+
 func init() {
 	flag.StringVar(&jsonPath,
 		"p",
@@ -98,10 +100,10 @@ func getStdIn() []byte {
 
 func usage() {
 	_, _ = fmt.Fprintf(os.Stderr, `=======
-jutil
+jutil %s
 =======
 Usage: jutil [-p <path>] [-v]
 Options:
-`)
+`, Version)
 	flag.PrintDefaults()
 }

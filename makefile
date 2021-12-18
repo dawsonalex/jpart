@@ -16,7 +16,7 @@ release: $(PLATFORMS)
 zip:
 
 $(PLATFORMS):
-	GOOS=$(os) GOARCH=$(arch) go build -ldflags "-X main.Version=$CLI_VERSION" -o 'bin/$(os)/$(arch)/$(BINARY)' $(CMD);mkdir -p artifact;zip artifact/$(BINARY)-$(os)-$(arch) bin/$(os)/$(arch)/$(BINARY)
+	GOOS=$(os) GOARCH=$(arch) go build -ldflags "-X 'main.Version=${CLI_VERSION}'" -o 'bin/$(os)/$(arch)/$(BINARY)' $(CMD);mkdir -p artifact;zip artifact/$(BINARY)-$(os)-$(arch) bin/$(os)/$(arch)/$(BINARY)
 
 .PHONY: release $(PLATFORMS)
 

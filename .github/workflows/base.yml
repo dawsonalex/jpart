@@ -21,11 +21,6 @@ jobs:
       - name: Test
         run: go test -v ./...
 
-      # TODO: update version to run before make, so make can use
-      # an env variable for binary versioning.
-      - name: Compile
-        run: make release
-
       - name: Bump version and push tag
         id: bump_version
         uses: anothrNick/github-tag-action@1.36.0
@@ -33,6 +28,11 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           WITH_V: false
           DEFAULT_BUMP: none
+
+      - name: Compile
+        run: make release
+        env:
+          CLI_VERSION: ${{ steps.bump_version.outputs.new_tag }}
 
       - name: Changelog
         uses: Bullrich/generate-release-changelog@master
