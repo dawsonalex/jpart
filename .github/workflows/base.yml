@@ -37,7 +37,7 @@ jobs:
       - name: Publish doc to go.dev packages
         run: |
           git pull
-          curl https://proxy.golang.org/github.com/akhettar/docker-db/@v/${{ steps.bump_version.outputs.new_tag }}.info
+          curl https://proxy.golang.org/github.com/dawsonalex/jpart/@v/${{ steps.bump_version.outputs.new_tag }}.info
 
       - name: Changelog
         uses: Bullrich/generate-release-changelog@master
