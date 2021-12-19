@@ -13,15 +13,15 @@ type Path string
 // Select returns the part of data that matches path. path is a period-delimited
 // string of element names. If Select returns an error it will be of type Error.
 func Select(path Path, data map[string]interface{}) (string, error) {
-	pathStr := string(path)
-	pathParts := strings.Split(pathStr, ".")
-	if len(pathParts) == 0 {
+	pathStr := strings.TrimSpace(string(path))
+	if pathStr == "" {
 		output, err := json.MarshalIndent(data, "", "  ")
 		if err != nil {
 			return "", makeError("error marshalling data", err)
 		}
 		return string(output), nil
 	}
+	pathParts := strings.Split(pathStr, ".")
 
 	var currentElement interface{}
 	currentElement = data

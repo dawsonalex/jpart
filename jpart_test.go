@@ -56,6 +56,12 @@ func TestSelect(t *testing.T) {
 		{
 			"not a path", Path("user.errorpath"), true, nil,
 		},
+		{
+			"no path", Path(""), false, data,
+		},
+		{
+			"just whitespace", Path(" "), false, data,
+		},
 	}
 
 	for _, test := range tests {
