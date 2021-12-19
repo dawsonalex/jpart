@@ -39,3 +39,7 @@ following steps under a single job called `Build`:
         - Leaving out the above tags will not create a new tag or release version.
     - Generate release logs from the commits between this tag and the last.
     - Create a GitHub release and upload the content of `bin`.
+
+## Upcoming changes
+
+- [ ] Add support for array indexes in paths.

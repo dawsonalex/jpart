@@ -39,6 +39,7 @@ func TestSelect(t *testing.T) {
 				"street": "Some Street",
 				"place":  "Some Place",
 			},
+			"highScores": []int{1, 2, 3},
 		},
 	}
 
@@ -62,6 +63,12 @@ func TestSelect(t *testing.T) {
 		{
 			"just whitespace", Path(" "), false, data,
 		},
+		{
+			"slice type", Path("user.highScores"), false, data["user"].(map[string]interface{})["highScores"],
+		},
+		{
+			"slice index", Path("user.highScores.0"), false, 1,
+		},
 	}
 
 	for _, test := range tests {
@@ -75,7 +82,8 @@ func TestSelect(t *testing.T) {
 				}
 			}
 			if err != nil {
-				tt.Error(err)
+				tt.Error("got unexpected error: ", err)
+				tt.FailNow()
 			}
 
 			var result interface{}
@@ -85,8 +93,8 @@ func TestSelect(t *testing.T) {
 			}
 
 			// going on the string representation of the type here
-			if fmt.Sprintf("%#v", result) != fmt.Sprintf("%#v", test.expects) {
-				tt.Error(fmt.Sprintf("expected %#v, got %#v", test.expects, result))
+			if fmt.Sprintf("%v", result) != fmt.Sprintf("%v", test.expects) {
+				tt.Error(fmt.Sprintf("expected %v, got %v", test.expects, result))
 			}
 		})
 	}
