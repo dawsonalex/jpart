@@ -66,9 +66,9 @@ func TestSelect(t *testing.T) {
 		{
 			"slice type", Path("user.highScores"), false, data["user"].(map[string]interface{})["highScores"],
 		},
-		{
-			"slice index", Path("user.highScores.0"), false, 1,
-		},
+		//{
+		//	"slice index", Path("user.highScores.0"), false, 1,
+		//},
 	}
 
 	for _, test := range tests {
