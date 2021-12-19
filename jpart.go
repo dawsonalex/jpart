@@ -1,3 +1,4 @@
+// Package jpart is a utility for extracting partial data from JSON structures.
 package jpart
 
 import (
@@ -49,11 +50,6 @@ func Select(path Path, data map[string]interface{}) (string, error) {
 	return string(output), nil
 }
 
-type Error interface {
-	error
-	fmt.Stringer
-}
-
 // Error represents an error in Matching a path
 // to a Structure.
 type jpartError struct {
@@ -61,20 +57,12 @@ type jpartError struct {
 	message string
 }
 
-// String returns the full error message, including a prefix with the package name.
-func (j jpartError) String() string {
+// Error returns the package error message, and the inner error if there is one.
+func (j jpartError) Error() string {
 	if j.inner == nil {
 		return fmt.Sprintf("jpart: %s", j.message)
 	}
 	return fmt.Sprintf("jpart: %s: %v", j.message, j.inner)
-}
-
-// Error returns the package error message, and the inner error if there is one.
-func (j jpartError) Error() string {
-	if j.inner == nil {
-		return fmt.Sprintf("%s", j.message)
-	}
-	return fmt.Sprintf("%s: %v", j.message, j.inner)
 }
 
 func makeError(message string, inner error) error {
